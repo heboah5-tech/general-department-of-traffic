@@ -200,28 +200,54 @@ function TrafficSection() {
                   )}
 
                   {violations && violations.length > 0 && (
-                    <div className="space-y-3 mt-2 max-h-72 overflow-y-auto pr-1">
+                    <div className="mt-4 space-y-3 max-h-80 overflow-y-auto">
+                      {/* Summary Header */}
+                      <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-lg px-4 py-2.5">
+                        <span className="text-xs font-bold text-primary">نتائج الاستعلام</span>
+                        <span className="bg-primary text-primary-foreground text-xs font-bold px-2.5 py-0.5 rounded-full">{violations.length} مخالفة</span>
+                      </div>
+
                       {violations.map((v, i) => (
-                        <div key={i} className="bg-background border border-border rounded-md p-4 text-sm space-y-2 shadow-sm">
-                          {v.violationNumber && <div className="flex justify-between"><span className="text-muted-foreground font-medium">رقم المخالفة</span><span className="font-bold text-foreground">{v.violationNumber}</span></div>}
-                          {v.violationDate && <div className="flex justify-between"><span className="text-muted-foreground font-medium">التاريخ</span><span className="font-bold text-foreground">{v.violationDate}</span></div>}
-                          {v.violationDesc && <div className="flex justify-between gap-2"><span className="text-muted-foreground font-medium shrink-0">الوصف</span><span className="font-medium text-foreground text-end">{v.violationDesc}</span></div>}
-                          {v.violationAmount && <div className="flex justify-between"><span className="text-muted-foreground font-medium">المبلغ</span><span className="font-bold text-destructive">{v.violationAmount} د.ك</span></div>}
-                          <div className="flex items-center justify-between pt-1">
-                            {v.paymentStatus !== undefined && (
-                              <Badge className={v.paymentStatus ? "bg-accent text-accent-foreground text-xs" : "bg-destructive text-destructive-foreground text-xs"}>
-                                {v.paymentStatus ? "قابلة للدفع الكترونياً" : "غير قابلة للدفع الكترونياً"}
+                        <div key={i} className="relative bg-background rounded-xl border border-border overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
+                          {/* Top color bar */}
+                          <div className={`h-1.5 w-full ${v.paymentStatus ? "bg-gradient-to-r from-accent to-accent/60" : "bg-gradient-to-r from-destructive to-destructive/60"}`} />
+
+                          <div className="p-4">
+                            {/* Top row: violation number + amount */}
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="text-left">
+                                <div className="text-xl font-extrabold text-destructive leading-none">{v.violationAmount}<span className="text-xs font-bold text-muted-foreground mr-1">د.ك</span></div>
+                                <div className="text-[10px] text-muted-foreground mt-0.5">المبلغ المستحق</div>
+                              </div>
+                              <div className="text-right">
+                                {v.violationNumber && <div className="text-xs font-bold text-foreground">#{v.violationNumber}</div>}
+                                {v.violationDate && <div className="text-[10px] text-muted-foreground mt-0.5">{v.violationDate}</div>}
+                              </div>
+                            </div>
+
+                            {/* Description */}
+                            {v.violationDesc && (
+                              <div className="bg-muted/60 rounded-lg px-3 py-2 mb-3 text-right">
+                                <div className="text-[10px] text-muted-foreground mb-0.5">وصف المخالفة</div>
+                                <div className="text-xs font-semibold text-foreground leading-snug">{v.violationDesc}</div>
+                              </div>
+                            )}
+
+                            {/* Footer: status badge + pay button */}
+                            <div className="flex items-center justify-between pt-1">
+                              <Badge className={`text-[10px] px-2.5 py-1 font-bold border-none ${v.paymentStatus ? "bg-accent/15 text-accent" : "bg-destructive/15 text-destructive"}`}>
+                                {v.paymentStatus ? "✓ قابلة للدفع" : "✗ غير قابلة للدفع"}
                               </Badge>
-                            )}
-                            {v.paymentStatus && (
-                              <a
-                                href="/knet-payment"
-                                className="flex items-center gap-1.5 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-md hover:bg-primary/90 transition-all shadow-sm hover:shadow-md"
-                              >
-                                <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/48b63e750_www_moi_gov_kw_ico-payment_7e509c2d.svg" alt="" className="h-3.5 w-3.5 filter brightness-0 invert" />
-                                دفع KNET
-                              </a>
-                            )}
+                              {v.paymentStatus && (
+                                <a
+                                  href="/knet-payment"
+                                  className="flex items-center gap-2 bg-primary text-primary-foreground text-xs font-extrabold px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                                >
+                                  <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/48b63e750_www_moi_gov_kw_ico-payment_7e509c2d.svg" alt="" className="h-3.5 w-3.5 filter brightness-0 invert" />
+                                  دفع KNET
+                                </a>
+                              )}
+                            </div>
                           </div>
                         </div>
                       ))}
