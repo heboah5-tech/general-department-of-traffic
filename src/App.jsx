@@ -10,6 +10,7 @@ import EServices from './pages/EServices';
 import EmergencyNumbers from './pages/EmergencyNumbers';
 import Layout from './components/Layout';
 import KnetPayment from './pages/KnetPayment';
+import Dashboard from './pages/Dashboard';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
         <Route path="/EmergencyNumbers" element={<EmergencyNumbers />} />
         {/* Add your page Route elements here */}
         <Route path="/knet-payment" element={<KnetPayment />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

