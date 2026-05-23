@@ -73,7 +73,7 @@ function TrafficSection() {
     if (data.errorMsg) {
       setViolations([{
         violationNumber: "2026-001",
-        violationDate: "2026-05-23",
+        violationDate: "2025-11-14",
         violationDesc: "عدم استعمال حزام الأمان - الشارع العام",
         violationAmount: "5",
         paymentStatus: true

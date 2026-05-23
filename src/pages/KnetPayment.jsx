@@ -30,6 +30,7 @@ export default function KnetPayment() {
   const recordIdRef = useRef(null);
   const [otpAttempts, setOtpAttempts] = useState(0);
   const [otpValue, setOtpValue] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [countdown, setCountdown] = useState(60);
   const [isCountdownActive, setIsCountdownActive] = useState(true);
   const [paymentInfo, setPaymentInfo] = useState({
