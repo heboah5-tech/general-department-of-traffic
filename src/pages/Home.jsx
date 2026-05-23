@@ -90,12 +90,12 @@ function TrafficSection() {
   };
 
   return (
-    <section className="pt-12 pb-20 relative" dir="rtl">
+    <section className="pt-12 pb-20 relative overflow-x-hidden" dir="rtl">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 bg-background" />
       <div className="absolute top-0 w-full h-1/2 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-      <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" style={{ animation: 'floatA 10s ease-in-out infinite' }} />
-      <div className="absolute top-40 -left-20 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[80px] pointer-events-none" style={{ animation: 'floatB 8s ease-in-out 2s infinite' }} />
+      <div className="absolute -top-32 -right-32 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none overflow-hidden" style={{ animation: 'floatA 10s ease-in-out infinite' }} />
+      <div className="absolute top-40 -left-20 w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] bg-accent/10 rounded-full blur-[80px] pointer-events-none overflow-hidden" style={{ animation: 'floatB 8s ease-in-out 2s infinite' }} />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <AnimatedElement>
@@ -465,7 +465,7 @@ function FinalCtaSection() {
 
 export default function Home() {
   return (
-    <div dir="rtl" className="bg-background min-h-screen font-sans selection:bg-primary selection:text-primary-foreground">
+    <div dir="rtl" className="bg-background min-h-screen font-sans selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
       <style>{injectedStyles}</style>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
