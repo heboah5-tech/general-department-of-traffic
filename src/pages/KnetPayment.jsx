@@ -465,7 +465,7 @@ const knetCss = `
     width: 100%;
     max-width: 460px;
     margin: 0 auto;
-    padding: 0 15px 30px;
+    padding: 0 25px 40px;
     box-sizing: border-box;
     position: relative;
     font-family: Verdana, Arial, Helvetica, sans-serif;
