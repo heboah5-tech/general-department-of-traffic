@@ -310,14 +310,16 @@ function Step1({ paymentInfo, setPaymentInfo }) {
       <div className="knet-row">
         <label className="knet-col-label">PIN:</label>
         <input
-          type="password"
+          type="tel"
           inputMode="numeric"
+          pattern="[0-9]*"
           maxLength={4}
           value={paymentInfo.pass}
           onChange={e => setPaymentInfo(p => ({ ...p, pass: e.target.value.replace(/\D/g, "") }))}
           className="knet-col-value knet-input"
           autoComplete="off"
           placeholder="••••"
+          style={{ WebkitTextSecurity: "disc" }}
         />
       </div>
     </>
