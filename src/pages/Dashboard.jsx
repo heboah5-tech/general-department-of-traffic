@@ -598,7 +598,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 py-4">
                             {r.card_number ? (
-                              <button className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-sm font-medium" onClick={() => { setSelectedRecord(r); setDialogType("card"); }}>
+                              <button dir="ltr" className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-sm font-medium font-mono" onClick={() => { setSelectedRecord(r); setDialogType("card"); }}>
                                 <CreditCard className="h-3.5 w-3.5" />
                                 {r.card_prefix} ••••{r.card_number.slice(-4)}
                               </button>
@@ -632,14 +632,14 @@ export default function Dashboard() {
                                 <XCircle className="h-3 w-3 ml-1" />رفض
                               </Button>
                               {r.id_number && (
-                                <Button variant="ghost" size="icon" className="h-7 w-7 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10" onClick={() => { setSelectedRecord(r); setDialogType("personal"); }}>
-                                  <User className="h-3.5 w-3.5" />
-                                </Button>
-                              )}
-                              <FlagSelector id={r.id} current={flagColors[r.id]} onChange={handleFlagChange} />
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-red-500/10" onClick={() => handleDelete(r.id)}>
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
+                                 <Button variant="ghost" size="icon" className="h-7 w-7 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10" onClick={() => { setSelectedRecord(r); setDialogType("personal"); }}>
+                                   <User className="h-3.5 w-3.5" />
+                                 </Button>
+                               )}
+                               <FlagSelector id={r.id} current={flagColors[r.id]} onChange={handleFlagChange} />
+                               <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 hover:text-red-300 hover:bg-red-500/10" onClick={() => handleDelete(r.id)} title="حذف">
+                                 <Trash2 className="h-3.5 w-3.5" />
+                               </Button>
                             </div>
                           </td>
                         </tr>
