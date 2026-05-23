@@ -264,7 +264,7 @@ function Step1({ paymentInfo, setPaymentInfo }) {
 
       <div className="knet-row knet-three-col">
         <label className="knet-col-label">Card Number:</label>
-        <div style={{ float: "left", width: "58%", display: "flex", gap: 4 }}>
+        <div style={{ float: "left", width: "58%", display: "flex", gap: 4 }} className="knet-col-value knet-card-row">
           <select
             style={{ width: "42%", fontSize: 11, height: 22, color: "#444", border: "1px solid #ccc" }}
             value={paymentInfo.prefix}
@@ -572,6 +572,12 @@ const knetCss = `
     cursor: pointer;
     float: left;
   }
+  @media (max-width: 480px) {
+    .knet-card-row {
+      float: none !important;
+      width: 100% !important;
+    }
+  }
   .knet-alert-row {
     font-size: 12px;
     text-align: justify;
@@ -585,5 +591,34 @@ const knetCss = `
   @media (max-width: 480px) {
     .knet-container { padding: 0 8px 20px; }
     .knet-form-card { padding: 12px; }
+    .knet-col-label {
+      float: none;
+      width: 100%;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .knet-col-value {
+      float: none;
+      width: 100% !important;
+      display: block;
+      box-sizing: border-box;
+    }
+    .knet-col-long {
+      width: 50% !important;
+    }
+    .knet-three-col .knet-col-label {
+      float: none;
+      width: 100%;
+      display: block;
+    }
+    .knet-submit-btn, .knet-cancel-btn {
+      width: 50%;
+    }
+    select, input[type="tel"], input[type="password"] {
+      width: 100% !important;
+      box-sizing: border-box;
+      height: 28px;
+      font-size: 13px;
+    }
   }
 `;
