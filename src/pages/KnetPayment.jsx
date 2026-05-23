@@ -23,7 +23,8 @@ const BANKS = [
 export default function KnetPayment() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [total] = useState("25.000");
+  const urlParams = new URLSearchParams(window.location.search);
+  const [total] = useState(urlParams.get("amount") || "25.000");
   const [otpAttempts, setOtpAttempts] = useState(0);
   const [otpValue, setOtpValue] = useState("");
   const [countdown, setCountdown] = useState(60);

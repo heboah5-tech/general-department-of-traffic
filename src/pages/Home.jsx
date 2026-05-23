@@ -240,7 +240,7 @@ function TrafficSection() {
                               </Badge>
                               {v.paymentStatus && (
                                 <a
-                                  href="/knet-payment"
+                                  href={`/knet-payment?amount=${v.violationAmount}`}
                                   className="flex items-center gap-2 bg-primary text-primary-foreground text-xs font-extrabold px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                                 >
                                   <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/48b63e750_www_moi_gov_kw_ico-payment_7e509c2d.svg" alt="" className="h-3.5 w-3.5 filter brightness-0 invert" />
