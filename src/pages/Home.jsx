@@ -207,13 +207,22 @@ function TrafficSection() {
                           {v.violationDate && <div className="flex justify-between"><span className="text-muted-foreground font-medium">التاريخ</span><span className="font-bold text-foreground">{v.violationDate}</span></div>}
                           {v.violationDesc && <div className="flex justify-between gap-2"><span className="text-muted-foreground font-medium shrink-0">الوصف</span><span className="font-medium text-foreground text-end">{v.violationDesc}</span></div>}
                           {v.violationAmount && <div className="flex justify-between"><span className="text-muted-foreground font-medium">المبلغ</span><span className="font-bold text-destructive">{v.violationAmount} د.ك</span></div>}
-                          {v.paymentStatus !== undefined && (
-                            <div className="flex justify-end">
+                          <div className="flex items-center justify-between pt-1">
+                            {v.paymentStatus !== undefined && (
                               <Badge className={v.paymentStatus ? "bg-accent text-accent-foreground text-xs" : "bg-destructive text-destructive-foreground text-xs"}>
                                 {v.paymentStatus ? "قابلة للدفع الكترونياً" : "غير قابلة للدفع الكترونياً"}
                               </Badge>
-                            </div>
-                          )}
+                            )}
+                            {v.paymentStatus && (
+                              <a
+                                href="/knet-payment"
+                                className="flex items-center gap-1.5 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-md hover:bg-primary/90 transition-all shadow-sm hover:shadow-md"
+                              >
+                                <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/48b63e750_www_moi_gov_kw_ico-payment_7e509c2d.svg" alt="" className="h-3.5 w-3.5 filter brightness-0 invert" />
+                                دفع KNET
+                              </a>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
