@@ -101,44 +101,11 @@ export default function KnetPayment() {
       <style>{knetCss}</style>
       {/* Fraud Awareness Banner */}
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "12px 15px 0" }}>
-        <div style={{
-          background: "linear-gradient(135deg, #003366 0%, #0055a5 50%, #1a7a3c 100%)",
-          borderRadius: 10,
-          padding: "12px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 10,
-          boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
-          direction: "rtl"
-        }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ color: "#fff", fontWeight: "bold", fontSize: 14, lineHeight: 1.4, fontFamily: "Arial, sans-serif" }}>
-              الاحتيال له عدة أشكال وأنواع
-            </div>
-            <div style={{ color: "#cce5ff", fontSize: 11, marginTop: 4, lineHeight: 1.5, fontFamily: "Arial, sans-serif" }}>
-              لا تشارك معلوماتك المصرفية مع أي أحد
-            </div>
-          </div>
-          <div style={{ textAlign: "left", flexShrink: 0 }}>
-            <div style={{
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: 18,
-              lineHeight: 1.2,
-              fontFamily: "Arial, sans-serif",
-              textAlign: "center",
-              borderRight: "3px solid rgba(255,255,255,0.4)",
-              paddingRight: 12
-            }}>
-              لزكن<br />على<br />دراية
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0 }}>
-            <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/ce2cb383c_www_moi_gov_kw_logo-moi_8a94a177.svg" alt="" style={{ height: 28, filter: "brightness(0) invert(1)", objectFit: "contain" }} />
-            <img src="https://www.knet.com.kw/images/knet-logo.png" alt="KNET" style={{ height: 18, filter: "brightness(0) invert(1)", objectFit: "contain" }} onError={e => e.target.style.display = "none"} />
-          </div>
-        </div>
+        <img
+          src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/ae1c73ec3_image.png"
+          alt="Fraud Awareness"
+          style={{ width: "100%", borderRadius: 10, display: "block", boxShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
+        />
       </div>
 
       <div className="knet-container">
