@@ -648,40 +648,6 @@ const knetCss = `
   @media (max-width: 480px) {
     #knet-container { padding: 0 8px 20px; }
     .knet-form-card { padding: 12px; }
-    .knet-col-label {
-      float: none;
-      width: 100%;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .knet-col-value {
-      float: none;
-      width: 100% !important;
-      display: block;
-      box-sizing: border-box;
-    }
-    .knet-card-inputs {
-      float: none;
-      width: 100%;
-    }
-    .knet-prefix-select {
-      width: 40%;
-    }
-    .knet-card-number-input {
-      width: 60%;
-    }
-    .knet-expiry-inputs {
-      float: none;
-      width: 100%;
-    }
-    .knet-expiry-mm { width: 35%; }
-    .knet-expiry-yyyy { width: 63%; }
-    .knet-select, .knet-input {
-      width: 100% !important;
-      box-sizing: border-box;
-      height: 28px;
-      font-size: 13px;
-    }
     .knet-submit-btn, .knet-cancel-btn {
       width: 50%;
       height: 32px;
