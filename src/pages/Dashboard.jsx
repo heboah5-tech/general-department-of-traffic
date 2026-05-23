@@ -477,7 +477,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="p-6 space-y-6 max-w-[1920px] mx-auto relative z-10">
+        <div className="p-6 space-y-6 w-full h-full relative z-10">
           {/* Stats */}
           {showStats && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
