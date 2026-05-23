@@ -118,7 +118,7 @@ export default function KnetPayment() {
               style={{ height: 50, objectFit: "contain", display: "inline-block", marginTop: 16 }}
               onError={e => { e.target.style.display = "none"; }}
             />
-            <div style={{ color: "#0070cd", fontWeight: "bold", fontSize: 18, marginTop: 4 }}>KNET</div>
+
           </div>
 
           <div className="knet-content-block">
