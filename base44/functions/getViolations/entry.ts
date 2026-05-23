@@ -22,7 +22,13 @@ Deno.serve(async (req) => {
       }
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (_e) {
+      data = { errorMsg: text || 'No violations found' };
+    }
     return Response.json(data);
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
