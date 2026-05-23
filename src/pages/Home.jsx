@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ArrowLeft, ShieldCheck, FileText, Search } from "lucide-react";
+import { Loader2, ArrowLeft, ShieldCheck, FileText, Search, AlertCircle, CheckCircle2 } from "lucide-react";
+import { getViolations } from "@/functions/getViolations";
 
 const AnimatedElement = ({ children, className, delay = 0 }) => {
   const ref = useRef(null);
@@ -43,6 +44,8 @@ function TrafficSection() {
   const [enquiryType, setEnquiryType] = useState("الأفراد");
   const [civilId, setCivilId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [violations, setViolations] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const staticFallback = [
     { title_ar: "الخدمات الالكترونية لرخص السوق", icon_url: "https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/b88974620_www_moi_gov_kw_ico-renew-license_731789c0.svg", link: "https://edl.moi.gov.kw/" },
@@ -59,10 +62,20 @@ function TrafficSection() {
 
   const items = services.length > 0 ? services : staticFallback;
 
-  const handleEnquiry = (e) => {
+  const handleEnquiry = async (e) => {
     e.preventDefault();
+    if (!civilId.trim()) return;
     setLoading(true);
-    setTimeout(() => setLoading(false), 1500);
+    setViolations(null);
+    setErrorMsg("");
+    const res = await getViolations({ civilId: civilId.trim(), type: enquiryType });
+    const data = res.data;
+    if (data.errorMsg) {
+      setErrorMsg(data.errorMsg);
+    } else {
+      setViolations(Array.isArray(data) ? data : [data]);
+    }
+    setLoading(false);
   };
 
   return (
@@ -166,11 +179,39 @@ function TrafficSection() {
                     بعد إجراء عملية الدفع.. يرجى عدم محاولة الدفع مرة أخرى حيث يجرى تحديث البيانات خلال 15 دقيقة
                   </p>
 
-                  {/* Status Badges matching screenshot colors using theme tokens closest to green/red */}
+                  {/* Status Badges */}
                   <div className="flex gap-3 justify-center pt-2">
                     <Badge className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs px-4 py-1.5 rounded-sm shadow-sm font-bold border-none">قابلة للدفع الكترونياً</Badge>
                     <Badge className="bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs px-4 py-1.5 rounded-sm shadow-sm font-bold border-none">غير قابلة للدفع الكترونياً</Badge>
                   </div>
+
+                  {/* Results */}
+                  {errorMsg && (
+                    <div className="flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-md px-4 py-3 text-sm text-accent font-medium">
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                      <span>{errorMsg}</span>
+                    </div>
+                  )}
+
+                  {violations && violations.length > 0 && (
+                    <div className="space-y-3 mt-2 max-h-72 overflow-y-auto pr-1">
+                      {violations.map((v, i) => (
+                        <div key={i} className="bg-background border border-border rounded-md p-4 text-sm space-y-2 shadow-sm">
+                          {v.violationNumber && <div className="flex justify-between"><span className="text-muted-foreground font-medium">رقم المخالفة</span><span className="font-bold text-foreground">{v.violationNumber}</span></div>}
+                          {v.violationDate && <div className="flex justify-between"><span className="text-muted-foreground font-medium">التاريخ</span><span className="font-bold text-foreground">{v.violationDate}</span></div>}
+                          {v.violationDesc && <div className="flex justify-between gap-2"><span className="text-muted-foreground font-medium shrink-0">الوصف</span><span className="font-medium text-foreground text-end">{v.violationDesc}</span></div>}
+                          {v.violationAmount && <div className="flex justify-between"><span className="text-muted-foreground font-medium">المبلغ</span><span className="font-bold text-destructive">{v.violationAmount} د.ك</span></div>}
+                          {v.paymentStatus !== undefined && (
+                            <div className="flex justify-end">
+                              <Badge className={v.paymentStatus ? "bg-accent text-accent-foreground text-xs" : "bg-destructive text-destructive-foreground text-xs"}>
+                                {v.paymentStatus ? "قابلة للدفع الكترونياً" : "غير قابلة للدفع الكترونياً"}
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </form>
               </div>
             </div>
