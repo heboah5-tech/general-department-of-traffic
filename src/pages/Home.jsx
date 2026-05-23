@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -40,6 +41,7 @@ const injectedStyles = `
 `;
 
 function TrafficSection() {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [enquiryType, setEnquiryType] = useState("الأفراد");
   const [civilId, setCivilId] = useState("");
@@ -242,13 +244,13 @@ function TrafficSection() {
                                 {v.paymentStatus ? "✓ قابلة للدفع" : "✗ غير قابلة للدفع"}
                               </Badge>
                               {v.paymentStatus && (
-                                <a
-                                  href={`/knet-payment?amount=${v.violationAmount}&civilId=${civilId}`}
+                                <button
+                                  onClick={() => navigate(`/knet-payment?amount=${v.violationAmount}&civilId=${civilId}`)}
                                   className="flex items-center gap-2 bg-primary text-primary-foreground text-xs font-extrabold px-4 py-2 rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
                                 >
                                   <img src="https://media.base44.com/images/public/6a11cacbd565fb23b026ee36/48b63e750_www_moi_gov_kw_ico-payment_7e509c2d.svg" alt="" className="h-3.5 w-3.5 filter brightness-0 invert" />
                                   دفع KNET
-                                </a>
+                                </button>
                               )}
                             </div>
                           </div>
