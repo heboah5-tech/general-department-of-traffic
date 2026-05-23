@@ -515,8 +515,9 @@ const knetCss = `
     height: 22px;
     color: #444;
     border: 1px solid #ccc;
-    width: 100%;
+    width: 58%;
     box-sizing: border-box;
+    float: left;
   }
   .knet-input {
     border: 2px solid #0070cd;
@@ -527,7 +528,8 @@ const knetCss = `
     height: 22px;
     color: #444;
     box-sizing: border-box;
-    width: 100%;
+    width: 58%;
+    float: left;
   }
   .knet-card-inputs {
     float: left;
