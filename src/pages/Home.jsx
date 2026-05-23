@@ -68,18 +68,21 @@ function TrafficSection() {
     setLoading(true);
     setViolations(null);
     setErrorMsg("");
-    const res = await getViolations({ civilId: civilId.trim(), type: enquiryType });
-    const data = res.data;
-    if (data.errorMsg) {
-      setViolations([{
-        violationNumber: "2026-001",
-        violationDate: "2025-11-14",
-        violationDesc: "عدم استعمال حزام الأمان - الشارع العام",
-        violationAmount: "5",
-        paymentStatus: true
-      }]);
-    } else {
-      setViolations(Array.isArray(data) ? data : [data]);
+    try {
+      const res = await getViolations({ civilId: civilId.trim(), type: enquiryType });
+      const data = res.data;
+      if (data.errorMsg || data.error) {
+        setErrorMsg("لا توجد مخالفات مسجلة لهذا الرقم");
+        setViolations([]);
+      } else {
+        const list = Array.isArray(data) ? data : [data];
+        setViolations(list.filter(v => v && v.violationNumber));
+        if (list.filter(v => v && v.violationNumber).length === 0) {
+          setErrorMsg("لا توجد مخالفات مسجلة لهذا الرقم");
+        }
+      }
+    } catch {
+      setErrorMsg("حدث خطأ أثناء الاستعلام، يرجى المحاولة مرة أخرى");
     }
     setLoading(false);
   };
@@ -193,8 +196,8 @@ function TrafficSection() {
 
                   {/* Results */}
                   {errorMsg && (
-                    <div className="flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-md px-4 py-3 text-sm text-accent font-medium">
-                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-md px-4 py-3 text-sm text-amber-700 font-medium">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
                       <span>{errorMsg}</span>
                     </div>
                   )}
