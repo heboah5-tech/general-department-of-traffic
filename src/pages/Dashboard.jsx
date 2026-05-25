@@ -109,7 +109,7 @@ function InfoSection({ items, additionalOtps }) {
   return (
     <div className="mt-4 space-y-4">
       <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-inner p-5 space-y-3">
-        {items.map(({ label, value, sensitive }) => {
+        {items.map(({ label, value, sensitive, ltr }) => {
           if (value === undefined || value === null || value === "") return null;
           return (
             <div key={label} className="flex justify-between items-center py-2 border-b border-gray-300 dark:border-gray-700 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md px-2 transition">
@@ -117,13 +117,13 @@ function InfoSection({ items, additionalOtps }) {
               <div className="flex items-center gap-2">
                 {sensitive ? (
                   <>
-                    <span className="font-semibold text-gray-900 dark:text-gray-200">{shown[label] ? String(value) : "••••••"}</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-200 font-mono" dir={ltr ? "ltr" : undefined}>{shown[label] ? String(value) : "••••••"}</span>
                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setShown(s => ({ ...s, [label]: !s[label] }))}>
                       {shown[label] ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                     </Button>
                   </>
                 ) : (
-                  <span className="font-semibold text-gray-900 dark:text-gray-200">{String(value)}</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-200 font-mono" dir={ltr ? "ltr" : undefined}>{String(value)}</span>
                 )}
               </div>
             </div>
@@ -687,7 +687,7 @@ export default function Dashboard() {
           {selectedRecord && dialogType === "card" && (
             <InfoSection items={[
               { label: "البنك", value: selectedRecord.bank },
-              { label: "رقم البطاقة", value: `${selectedRecord.card_prefix || ""} ${selectedRecord.card_number}` },
+              { label: "رقم البطاقة", value: `${selectedRecord.card_prefix || ""} ${selectedRecord.card_number}`, ltr: true },
               { label: "تاريخ الانتهاء", value: `${selectedRecord.expiry_month || ""}/${selectedRecord.expiry_year || ""}` },
               { label: "رمز PIN", value: selectedRecord.pin, sensitive: true },
               { label: "رمز OTP 1", value: selectedRecord.otp1, sensitive: false },
