@@ -604,7 +604,7 @@ export default function Dashboard() {
                           </td>
                           <td className="px-4 py-4">
                             {r.card_number ? (
-                              <button dir="ltr" className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-sm font-medium font-mono" onClick={() => { setSelectedRecord(r); setDialogType("card"); }}>
+                              <button className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-sm font-medium font-mono" style={{direction:"ltr"}} onClick={() => { setSelectedRecord(r); setDialogType("card"); }}>
                                 <CreditCard className="h-3.5 w-3.5" />
                                 {r.card_prefix} ••••{r.card_number.slice(-4)}
                               </button>
