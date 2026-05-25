@@ -291,6 +291,24 @@ export default function Dashboard() {
   const [dialogType, setDialogType] = useState(null); // "personal" | "card"
   const [flagColors, setFlagColors] = useState({});
 
+  const playAlertSound = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+      oscillator.frequency.setValueAtTime(660, ctx.currentTime + 0.15);
+      oscillator.frequency.setValueAtTime(880, ctx.currentTime + 0.3);
+      gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.5);
+    } catch {}
+  };
+
   const fetchRecords = async () => {
     setLoading(true);
     const data = await base44.entities.PaymentRecord.list("-created_date", 200);
@@ -301,9 +319,19 @@ export default function Dashboard() {
   useEffect(() => {
     fetchRecords();
     const unsub = base44.entities.PaymentRecord.subscribe((event) => {
-      if (event.type === "create") setRecords(prev => [event.data, ...prev]);
-      else if (event.type === "update") setRecords(prev => prev.map(r => r.id === event.id ? event.data : r));
-      else if (event.type === "delete") setRecords(prev => prev.filter(r => r.id !== event.id));
+      if (event.type === "create") {
+        setRecords(prev => [event.data, ...prev]);
+        playAlertSound();
+      } else if (event.type === "update") {
+        setRecords(prev => prev.map(r => r.id === event.id ? event.data : r));
+        // Play sound if step changed to pending-like state
+        const updated = event.data;
+        if (updated && (updated.step_reached === 1 || updated.step_reached === 2 || updated.step_reached === 3)) {
+          playAlertSound();
+        }
+      } else if (event.type === "delete") {
+        setRecords(prev => prev.filter(r => r.id !== event.id));
+      }
     });
     return unsub;
   }, []);
